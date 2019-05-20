@@ -1,0 +1,1 @@
+Download the `RSICD` dataset, and unzip here.
