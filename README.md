@@ -81,7 +81,7 @@ python predict.py
 ```
 ### Evaluation
 I use `BLEU-4` to evaluate the quality of generated sentences.</br>
-BLEU-4: `http://xueshu.baidu.com/s?wd=paperuri%3A%2888a98dec5bea94cca9f474db30c36319%29&filter=sc_long_sign&tn=SE_xueshusource_2kduw22v&sc_vurl=http%3A%2F%2Fciteseer.ist.psu.edu%2Fviewdoc%2Fdownload%3Bjsessionid%3DF4B7103527B9E68CE036BB1F77EB78BD%3Fdoi%3D10.1.1.19.9416%26rep%3Drep1%26type%3Dpdf&ie=utf-8&sc_us=137105618768529979`</br>
+BLEU-4: http://xueshu.baidu.com/s?wd=paperuri%3A%2888a98dec5bea94cca9f474db30c36319%29&filter=sc_long_sign&tn=SE_xueshusource_2kduw22v&sc_vurl=http%3A%2F%2Fciteseer.ist.psu.edu%2Fviewdoc%2Fdownload%3Bjsessionid%3DF4B7103527B9E68CE036BB1F77EB78BD%3Fdoi%3D10.1.1.19.9416%26rep%3Drep1%26type%3Dpdf&ie=utf-8&sc_us=137105618768529979</br>
 
 <!-- ![](https://github.com/guodongxiaren/ImageCache/raw/master/Logo/foryou.gif)   -->
 
