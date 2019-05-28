@@ -48,8 +48,8 @@ My model incloud `encoder`, `decoder` and `attention`.</br>
 Because of our project is used on ARM, so we must simplify the network, our encoder is `mobilenet_v2`, we delete the full connect layer for classification, make the `mobilenet_v2` output the feature map of image(size 7*7).</br></br>
 Attention part is composed of some full connect layer, input is the hidden layer's output of decoder, output is a tensor(size 1*49), reshape this tensor to size 7*7.</br>
 Then, we can get feature vector by `attention tenser(7*7)` and `feature map(7*7)`, and this feature vector is the input of decoder.</br>
-Attention image: 
-![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/attention.png)</br>
+Attention image: </br>
+![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/attention.png)</br></br>
 Decoder is base on LSTM, input is the embedding of words in dictorary(every word in dictionary is a `one-hot` code, and they will be transformed to feature vector by embedding layer), hidden layer is connected with full connect layer and softmax, output is the probability of the next word.</br>
 By the way, first input is a signal of beginning: `<start>`, and the last output is a signal of endding: `.`.</br>
 ### Data Augmentation
@@ -65,7 +65,7 @@ python train.py
 Loss function curve: 
 ![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/loss.png)
 ### Predict
-I used beam search to find the best sentence of image caption because beam search consider more possibility.</br>
+I used beam search to find the best sentence of image caption because beam search consider more possibility.</br>
 > Beam Search(Assuming that the dictionary is [a, b, c], beam size chooses 2):
 >> Step 1: When generating the first word, choose the two words with the highest probability, then the current sequence is `a` or `b`.</br></br>
 >> Step 2: When the second word is generated, we combine the current sequence `a` or `b` with all the words in the dictionary to get six new sequences `aa`, `ab`, `ac`, `ba`, `bb`, `bc`, and then select two of them with the highest probability as the current sequence, `ab` or `bb`.</br></br>
@@ -83,14 +83,14 @@ Then, you can run `predict.py`, and you will see the `image`, `sentence of image
 ```Bash
 python predict.py
 ```
-Example: 
-image: 
-![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/image.png)
-caption:
-![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/caption.png)
+Example: </br>
+image: </br>
+![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/image.png)</br>
+caption:</br>
+![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/caption.png)</br>
 ### Evaluation
 I use `BLEU-4` to evaluate the quality of generated sentences.</br>
-BLEU-4: http://xueshu.baidu.com/s?wd=paperuri%3A%2888a98dec5bea94cca9f474db30c36319%29&filter=sc_long_sign&tn=SE_xueshusource_2kduw22v&sc_vurl=http%3A%2F%2Fciteseer.ist.psu.edu%2Fviewdoc%2Fdownload%3Bjsessionid%3DF4B7103527B9E68CE036BB1F77EB78BD%3Fdoi%3D10.1.1.19.9416%26rep%3Drep1%26type%3Dpdf&ie=utf-8&sc_us=137105618768529979</br></br>
+BLEU-4: https://www.aclweb.org/anthology/P02-1040</br></br>
 My training BLEU: </br>
 BLEU-1: 0.4899</br>
 BLEU-2: 0.2312</br>
