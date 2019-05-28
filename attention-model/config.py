@@ -17,8 +17,8 @@ class Config():
     num_layers = 1
 
     # training config
-    batch_size = 2 # 64
-    train_iter = 30001 # 100000
+    batch_size = 100 # 64
+    train_iter = 60001 # 100000
     encoder_learning_rate = 1e-4
     decoder_learning_rate = 1e-4
-    save_model_iter = 5000
+    save_model_iter = 400

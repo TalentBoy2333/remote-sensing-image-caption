@@ -60,6 +60,8 @@ Then, we can start training by running `train.py`, you can modify the function `
 ```Bash
 python train.py
 ```
+Loss function 
+<!-- ![](https://github.com/guodongxiaren/ImageCache/raw/master/Logo/foryou.gif) -->
 ### Predict
 I used beam search to find the best sentence of image caption because beam search consider more possibility.</br>
 > Beam Search(Assuming that the dictionary is [a, b, c], beam size chooses 2):
@@ -81,8 +83,12 @@ python predict.py
 ```
 ### Evaluation
 I use `BLEU-4` to evaluate the quality of generated sentences.</br>
-BLEU-4: http://xueshu.baidu.com/s?wd=paperuri%3A%2888a98dec5bea94cca9f474db30c36319%29&filter=sc_long_sign&tn=SE_xueshusource_2kduw22v&sc_vurl=http%3A%2F%2Fciteseer.ist.psu.edu%2Fviewdoc%2Fdownload%3Bjsessionid%3DF4B7103527B9E68CE036BB1F77EB78BD%3Fdoi%3D10.1.1.19.9416%26rep%3Drep1%26type%3Dpdf&ie=utf-8&sc_us=137105618768529979</br>
+BLEU-4: http://xueshu.baidu.com/s?wd=paperuri%3A%2888a98dec5bea94cca9f474db30c36319%29&filter=sc_long_sign&tn=SE_xueshusource_2kduw22v&sc_vurl=http%3A%2F%2Fciteseer.ist.psu.edu%2Fviewdoc%2Fdownload%3Bjsessionid%3DF4B7103527B9E68CE036BB1F77EB78BD%3Fdoi%3D10.1.1.19.9416%26rep%3Drep1%26type%3Dpdf&ie=utf-8&sc_us=137105618768529979</br></br>
 
-<!-- ![](https://github.com/guodongxiaren/ImageCache/raw/master/Logo/foryou.gif)   -->
+BLEU-1: 0.4899
+BLEU-2: 0.2312
+BLEU-3: 0.1003
+BLEU-4: 0.0432
+
 
 

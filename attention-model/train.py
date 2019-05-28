@@ -26,7 +26,7 @@ def cal_loss(sentences, batch_label, alphas, alpha_c):
     return loss
 
 def train(model_path=None):
-    dataloader = DataLoader('train', Augmentation())
+    dataloader = DataLoader(Augmentation())
     encoder = Encoder()
     dict_len = len(dataloader.data.dictionary)
     decoder = DecoderWithAttention(dict_len)
@@ -41,6 +41,7 @@ def train(model_path=None):
     decoder_optimizer = torch.optim.Adam(decoder.parameters(), lr=cfg.decoder_learning_rate)
 
     val_bleu = list()
+    losses = list()
     while True:
         batch_image, batch_label = dataloader.get_next_batch()
         batch_image = torch.from_numpy(batch_image).type(torch.FloatTensor)
@@ -71,15 +72,18 @@ def train(model_path=None):
             '| encoder learning rate:', cfg.encoder_learning_rate, 
             '| decoder learning rate:', cfg.decoder_learning_rate
         )
-        if train_iter % 5 == 0:
-            val_bleu.append(val_eval(encoder, decoder))
+        losses.append(loss.cpu().data.numpy())
         if train_iter % cfg.save_model_iter == 0:
+            val_bleu.append(val_eval(encoder, decoder, dataloader))
             torch.save(encoder.state_dict(), './models/train/encoder_'+cfg.pre_train_model+'_'+str(train_iter)+'.pkl')
             torch.save(decoder.state_dict(), './models/train/decoder_'+str(train_iter)+'.pkl')
+            np.save('./result/train_bleu4.npy', val_bleu)
+            np.save('./result/losses.npy', losses)
+
         if train_iter == cfg.train_iter:
             break
         train_iter += 1
-    np.save('./result/train_bleu4.npy', val_bleu)
+    
 
 
 

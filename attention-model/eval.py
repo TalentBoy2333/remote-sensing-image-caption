@@ -123,8 +123,10 @@ def cal_pr(candidate, reference):
     :param reference: ground-truth, a list, 5 sentences(5 str)
     """
     pn = list()
-    for n in range(1, 5):
+    for n in range(1, 2): # modify this line to set calculate BLEU-N
         grams = get_grams(candidate, n)
+        if grams == []:
+            break
         # print(grams)
         grams_set = set(grams)
         pn.append(cal_pn(grams_set, grams, candidate, reference))
@@ -153,18 +155,25 @@ def cal_bp(candidate, reference):
     # print(bp)
     return bp
         
-def val_eval(encoder, decoder):
-    dataloader = DataLoader('val')
+def val_eval(encoder, decoder, dataloader):
+    print('Eavluating..')
+    images = dataloader.data.images
+    annotations = dataloader.data.annotations
+    val_list = dataloader.data.val_list
+    np.random.shuffle(val_list)
+    index = val_list[:100]
     encoder.eval()
     decoder.eval()
     bleu = list()
-    for ind in range(10):
-        image, _ = dataloader.get_one_data(ind)
+    for ind in index:
+        image = images[ind]
+        image = image.astype(np.float32) / 255.0
+        image = image.transpose([2,0,1]) 
+        image = np.expand_dims(image, axis=0)
         image = torch.from_numpy(image).type(torch.FloatTensor)
         if cuda:
             image = image.cuda()
-        anno_ind = dataloader.image_index_list[ind]
-        reference = dataloader.data.annotations_list[anno_ind]
+        reference = annotations[ind]
         # print(image.shape)
         # print(reference)
         output = encoder(image)
@@ -172,44 +181,51 @@ def val_eval(encoder, decoder):
         prediction = []
         for word in sentences[0]:
             prediction.append(dataloader.data.dictionary[word])
+            if word == 2:
+                break
+        prediction = ' '.join([word for word in prediction])
+        # print(prediction)
+        # print(reference)
+        bleu4 = cal_bleu(reference, prediction)
+        bleu.append(bleu4)
+    encoder.train()
+    decoder.train()
+    print('BLEU4: ', bleu)
+    return np.array(bleu).mean()
+
+def test_eval(encoder, decoder, data):
+    encoder.eval()
+    decoder.eval()
+    images = data.images
+    annotations = data.annotations
+    test_list = data.test_list
+    bleu = list()
+    for ind in test_list:
+        image = images[ind]
+        image = image.astype(np.float32) / 255.0
+        image = image.transpose([2,0,1]) 
+        image = np.expand_dims(image, axis=0)
+        image = torch.from_numpy(image).type(torch.FloatTensor)
+        if cuda:
+            image = image.cuda()
+        reference = annotations[ind]
+        # print(image.shape)
+        # print(reference)
+        output = encoder(image)
+        sentences, _ = beam_search(data, decoder, output)
+        prediction = []
+        for word in sentences[0]:
+            prediction.append(data.dictionary[word])
             if word == 2:
                 break
         prediction = ' '.join([word for word in prediction])
         bleu4 = cal_bleu(reference, prediction)
         bleu.append(bleu4)
-    encoder.train()
-    decoder.train()
-    print(bleu)
-    return np.array(bleu).mean()
-
-def test_eval(encoder, decoder):
-    dataloader = DataLoader('test')
-    encoder.eval()
-    decoder.eval()
-    test_list = dataloader.data.test_list
-    bleu = list()
-    for ind in range(len(test_list)):
-        image, _ = dataloader.get_one_data(ind)
-        image = torch.from_numpy(image).type(torch.FloatTensor)
-        if cuda:
-            image = image.cuda()
-        anno_ind = dataloader.image_index_list[ind]
-        reference = dataloader.data.annotations_list[anno_ind]
-        # print(image.shape)
-        # print(reference)
-        output = encoder(image)
-        sentences, _ = beam_search(dataloader.data, decoder, output)
-        prediction = []
-        for word in sentences[0]:
-            prediction.append(dataloader.data.dictionary[word])
-            if word == 2:
-                break
-        prediction = ' '.join([word for word in prediction])
-        bleu4 = cal_bleu(reference, prediction)
-        bleu.append()
-    np.save('./result/test_bleu4.npy', bleu)
+    np.save('./result/test_bleu1.npy', bleu)
 
 if __name__ == '__main__':
     bleu4 = cal_bleu(['today is a nice day a a a a'], 'it is a nice day today')
     print(bleu4)
+
+
     

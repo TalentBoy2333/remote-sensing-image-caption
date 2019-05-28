@@ -1,5 +1,4 @@
 from config import Config 
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -12,12 +11,9 @@ class DataLoader():
     """
     Data Loader.
     """
-    def __init__(self, part='train', transform=None):
-        self.part = part
+    def __init__(self, transform=None):
         self.transform = transform
         self.data = Data()
-        self.data.get_images_list()
-        self.data.get_annotations()
         self.init_batch()
 
     def init_batch(self):
@@ -26,47 +22,40 @@ class DataLoader():
         and shuffle the name list.
         """
         self.image_index = 0
-        if self.part == 'train':
-            self.image_index_list = self.data.train_list
-        elif self.part == 'val':
-            self.image_index_list = self.data.val_list
-        else:
-            self.image_index_list = self.data.test_list
+        self.image_index_list = self.data.train_list
         self.sample_number = len(self.image_index_list) * 5
         # print(len(image_index_list))
         np.random.shuffle(self.image_index_list)
         # print(self.image_index_list)
 
-    def get_one_data(self, image_index, show=False):
+    def get_one_data(self, index, show=False):
         """
         Get one image, and one caption of the image.
-        :param image_index: the index of a image. a int number in [0, 50000]
+        :param index: the index of a image. a int number 
         :param show: show the image and sentence or not. True or False
         :return image: the image matrix. a np.array size (1, 3, 224, 224)
         :return label: the sentence label of the image. a np.array size (1, 35)
         """
         ind_list = self.image_index_list
         img_num = len(ind_list)
-        img_list = self.data.images_list
+        images = self.data.images
         sen_len = self.data.sentence_length
-        anno_list = self.data.annotations_list
+        anno_list = self.data.annotations
         dic = self.data.dictionary
         """
         # We have [img_num] images, but [img_num * 5] sentences for [img_num] images.
-        # So, the real image index is (image_index%img_num).
+        # So, the real image index is (index%img_num).
         # For example, we got index 40956, but we haven't 40956th image, 
         #              the real index is 40956 % 10000 = 956
         # Go on, the 956th image has five sentences, so which should we take?
-        # We calculate the index of label by int(image_index/10000)
+        # We calculate the index of label by int(index/10000)
         #              the index of the image is 40956, 
         #              int(40956 / 10000) = 4
         # So, we should take the 4th(we can take 0th, 1st, 2nd, 3rd, 4th) sentence of this image.
         """
-        label_index = int(image_index / img_num)
-        real_index = image_index % img_num
-        image_name = img_list[ind_list[real_index]]
-        image_name = os.path.join(cfg.images_folder, image_name)
-        image = cv2.imread(image_name)
+        label_index = int(index / img_num)
+        real_index = index % img_num
+        image = images[ind_list[real_index]]
         if self.transform is not None:
             image = self.transform(image)
         if show:
@@ -150,15 +139,13 @@ class DataLoader():
 
 
 if __name__ == '__main__':
-    dataloader = DataLoader('train', Augmentation())
-    # image, label = dataloader.get_one_data(2450, True)
-    # print('image:', image.shape)
-    # print('label:', label.shape)
-    # print(label)
+    dataloader = DataLoader(Augmentation())
+    image, label = dataloader.get_one_data(2450, True)
+    print('image:', image.shape)
+    print('label:', label)
 
-
-    batch_image, batch_label = dataloader.get_next_batch()
-    print(batch_image.shape)
-    print(batch_label.shape)
+    # batch_image, batch_label = dataloader.get_next_batch()
+    # print(batch_image.shape)
+    # print(batch_label.shape)
     # print(batch_label)
     
