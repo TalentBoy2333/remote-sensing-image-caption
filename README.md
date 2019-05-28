@@ -93,5 +93,5 @@ I use `BLEU-4` to evaluate the quality of generated sentences.</br>
 BLEU-4: https://www.aclweb.org/anthology/P02-1040</br></br>
 My training BLEU: </br>
 BLEU-1|BLEU-2|BLEU-3|BLEU-4|
-------|-----|-----|------|
+------|------|------|------|
 0.4899|0.2312|0.1003|0.0432|
