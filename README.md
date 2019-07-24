@@ -62,8 +62,8 @@ Then, we can start training by running `train.py`, you can modify the function `
 ```Bash
 python train.py
 ```
-Loss function curve: 
-![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/loss.png)
+<!-- Loss function curve: 
+![](https://github.com/TalentBoy2333/remote-sensing-image-caption/blob/master/images/loss.png) -->
 ### Predict
 I used beam search to find the best sentence of image caption because beam search consider more possibility.</br>
 > Beam Search(Assuming that the dictionary is [a, b, c], beam size chooses 2):
@@ -92,6 +92,6 @@ caption:</br>
 I use `BLEU-4` to evaluate the quality of generated sentences.</br>
 BLEU-4: https://www.aclweb.org/anthology/P02-1040</br></br>
 My training BLEU: </br>
-BLEU-1|BLEU-2|BLEU-3|BLEU-4|
+<!-- BLEU-1|BLEU-2|BLEU-3|BLEU-4|
 ------|------|------|------|
-0.4899|0.2312|0.1003|0.0432|
+0.4899|0.2312|0.1003|0.0432| -->
